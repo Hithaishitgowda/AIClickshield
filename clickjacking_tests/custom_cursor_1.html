@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deceptive Cursor Example</title>
+  <style>
+    body {
+      background: #1a202c;
+      color: white;
+      font-family: sans-serif;
+      cursor: none;
+    }
+    .btn {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 60px; font-size: 20px; border-radius: 8px;
+      border: none; background: #4caf50; z-index: 1;
+      cursor: none;
+    }
+    .real-pay { top: 50%; }
+    .fake-ok { top: 35%; background: #2196f3; }
+    .fake-pointer {
+      width: 32px; height: 32px;
+      position: absolute;
+      pointer-events: none;
+      background: url('https://cdn-icons-png.flaticon.com/512/54/54761.png') no-repeat center;
+      background-size: contain;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <button class="btn fake-ok">OK</button>
+  <button class="btn real-pay" onclick="alert('💳 Charged ₹500')">Pay Now</button>
+  <div class="fake-pointer" id="fakePointer"></div>
+
+  <script>
+    document.addEventListener('mousemove', function(e) {
+      const x = e.clientX + 30;
+      const y = e.clientY - 120;
+      document.getElementById("fakePointer").style.left = x + "px";
+      document.getElementById("fakePointer").style.top = y + "px";
+    });
+  </script>
+</body>
+</html>

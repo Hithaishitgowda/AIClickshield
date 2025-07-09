@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fake Cursor Click Trap</title>
+  <style>
+    body {
+      background: #0f172a;
+      font-family: Arial, sans-serif;
+      color: white;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      cursor: none; /* Hide real cursor globally */
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+      color: #38bdf8;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      cursor: none; /* ✅ Ensure cursor stays hidden over buttons */
+    }
+
+    .click-button {
+      top: 40%;
+      background-color: #3b82f6;
+    }
+
+    .pay-button {
+      top: 60%;
+      background-color: #ef4444;
+    }
+
+    .fake-cursor {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      background: url('https://pngimg.com/d/cursor_PNG78.png') no-repeat center;
+      background-size: contain;
+      z-index: 1;
+      opacity: 1;
+      pointer-events: none; /* So clicks pass through */
+    }
+  </style>
+</head>
+<body>
+  <h1>Click "Click" to Continue</h1>
+
+  <!-- Fake visible button -->
+  <button class="btn click-button">Click</button>
+
+  <!-- Hidden real target -->
+  <button class="btn pay-button" onclick="alert('⚠️ Payment Done ₹500')">Pay ₹500</button>
+
+  <!-- Fake cursor -->
+  <div class="fake-cursor" id="fakeCursor"></div>
+
+  <script>
+    const fake = document.getElementById('fakeCursor');
+
+    document.addEventListener('mousemove', function (e) {
+      // Offset to mislead user
+      const offsetX = -35;
+      const offsetY = -160;
+
+      fake.style.left = (e.clientX + offsetX) + 'px';
+      fake.style.top = (e.clientY + offsetY) + 'px';
+    });
+  </script>
+</body>
+</html>

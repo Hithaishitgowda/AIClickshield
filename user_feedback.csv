@@ -1,0 +1,50 @@
+url,real_verdict,agree,user_verdict,reason,ip
+http://127.0.0.1:5501/7.html,malicious,no,safe,it is safe i guess,127.0.0.1
+http://127.0.0.1:5501/7.html,malicious,no,safe,it isssss safeeeee,127.0.0.1
+http://127.0.0.1:5501/6.html,malicious,no,safe,it is safe okay,127.0.0.1
+https://chatgpt.com,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/4.html,malicious,no,safe,IT IS SAFE,127.0.0.1
+http://127.0.0.1:5501/10.html,safe,yes,,,127.0.0.1
+https://www.cartoonnetwork.ca,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/10.html,suspicious,yes,,,127.0.0.1
+http://127.0.0.1:5501/10.html,malicious,yes,,,127.0.0.1
+http://127.0.0.1:5501/8.html,malicious,no,safe,"it's safeeeeeeeee",127.0.0.1
+http://127.0.0.1:5501/7.html,malicious,yes,,,127.0.0.1
+https://espncricinfo.com,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/9.html,suspicious,yes,,,127.0.0.1
+http://127.0.0.1:5501/8.html,malicious,yes,,,127.0.0.1
+https://www.instagram.com,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/6.html,malicious,no,safe,wesdrftgyh,127.0.0.1
+http://127.0.0.1:5501/9.html,suspicious,no,malicious,clip ai verdict is wrong,127.0.0.1
+http://127.0.0.1:5501/8.html,malicious,yes,,,127.0.0.1
+http://127.0.0.1:5501/themed_clickjacking_pocs%202/bitcoin_poc.html,malicious,yes,,,127.0.0.1
+https://www.owasp.org/index.php/OWASP_Demo_Page_for_Clickjacking,safe,yes,,,127.0.0.1
+https://breadjam.com,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/clickjacking_tests/test_34_auto_form_submission_v1.html,malicious,yes,,,127.0.0.1
+http://127.0.0.1:5501/7.html,malicious,yes,,,127.0.0.1
+https://wikipedia.com,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/10.html,malicious,yes,,,127.0.0.1
+https://quora.com,safe,yes,,,127.0.0.1
+https://zoom.us,suspicious,no,safe,,127.0.0.1
+https://paypal.com,suspicious,no,safe,,127.0.0.1
+https://microsoft.com,safe,yes,,,127.0.0.1
+https://example.com,safe,yes,,,127.0.0.1
+https://google.com,safe,yes,,,127.0.0.1
+https://example.com,safe,yes,,,127.0.0.1
+https://apple.com,safe,yes,,,127.0.0.1
+https://bbc.com,safe,yes,,,127.0.0.1
+https://openai.com,safe,yes,,,127.0.0.1
+https://github.com,safe,yes,,,127.0.0.1
+http://neverssl.com,malicious,yes,,,127.0.0.1
+https://apple.com,safe,yes,,,127.0.0.1
+https://github.com,safe,yes,,,127.0.0.1
+https://bbc.com,safe,yes,,,127.0.0.1
+https://google.com,safe,yes,,,127.0.0.1
+https://example.com,safe,yes,,,127.0.0.1
+https://www.google.com,safe,yes,,,127.0.0.1
+https://stackoverflow.com,safe,yes,,,127.0.0.1
+https://reddit.com,suspicious,yes,,,127.0.0.1
+https://xframeoptions.herokuapp.com,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/10.html,malicious,yes,,,127.0.0.1
+https://apple.com,safe,yes,,,127.0.0.1
+http://127.0.0.1:5501/10.html,malicious,no,safe,it is safe,127.0.0.1

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Progressive Trap Reveal</title>
+  <style>
+    .box { position: relative; width: 300px; height: 100px; margin: 100px auto; }
+    .btn1 {
+      width: 100%; height: 100%;
+      background: #9c27b0; color: white;
+      font-size: 22px; border: none;
+      border-radius: 10px; z-index: 1;
+    }
+    .hidden-layer {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: rgba(0, 255, 0, 0.2);
+      z-index: 2; pointer-events: auto;
+      display: none;
+    }
+  </style>
+  <script>
+    let clickCount = 0;
+    function nextStep() {
+      clickCount++;
+      if (clickCount === 1) {
+        alert('Now click again to confirm...');
+        document.querySelector('.hidden-layer').style.display = 'block';
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="box">
+    <button class="btn1" onclick="nextStep()">Proceed</button>
+    <div class="hidden-layer" onclick="alert('🧨 Multistep trap triggered')"></div>
+  </div>
+</body>
+</html>

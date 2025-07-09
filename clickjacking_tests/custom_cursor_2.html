@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Misleading Cursor Layer</title>
+  <style>
+    body {
+      background: #0f172a;
+      color: #fff;
+      font-family: sans-serif;
+      cursor: none;
+      margin: 0;
+    }
+    .real-btn {
+      position: absolute; top: 60%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #dc2626; color: white;
+      padding: 16px 40px; border: none;
+      border-radius: 12px; z-index: 1;
+    }
+    .fake-btn {
+      position: absolute; top: 40%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #10b981;
+      padding: 16px 40px; border: none;
+      border-radius: 12px;
+    }
+    #cursorImage {
+      width: 32px; height: 32px;
+      position: absolute;
+      z-index: 999;
+      pointer-events: none;
+      background: url('https://cdn-icons-png.flaticon.com/512/32/32339.png') no-repeat center;
+      background-size: contain;
+    }
+  </style>
+</head>
+<body>
+  <button class="fake-btn">Start</button>
+  <button class="real-btn" onclick="alert('⚠️ Payment Completed!')">Pay</button>
+  <div id="cursorImage"></div>
+
+  <script>
+    const fakeCursor = document.getElementById('cursorImage');
+    document.addEventListener('mousemove', e => {
+      fakeCursor.style.left = (e.clientX + 20) + 'px';
+      fakeCursor.style.top = (e.clientY - 180) + 'px';
+    });
+  </script>
+</body>
+</html>

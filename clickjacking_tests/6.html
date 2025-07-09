@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pointer Events Clickjacking (Scanner Optimized)</title>
+  <style>
+    .container { 
+      position: relative; 
+      width: 350px; height: 120px; 
+      margin: 100px auto;
+      /* Added container z-index for clearer stacking */
+      z-index: 0;
+    }
+    #realButton {
+      width: 350px; height: 120px; font-size: 28px;
+      background: #673ab7; color: white; border: none; border-radius: 8px;
+      position: absolute; top: 0; left: 0; z-index: 1;
+    }
+    #trapDiv {
+      position: absolute; 
+      top: 0; left: 0; 
+      width: 350px; height: 120px;
+      background: rgba(255,255,255,0.01); 
+      z-index: 2; 
+      pointer-events: auto;
+      /* Added explicit styles for detection */
+      opacity: 0.01 !important;
+    }
+    #coverDiv {
+      position: absolute; 
+      top: 0; left: 0; 
+      width: 350px; height: 120px;
+      background: transparent; 
+      z-index: 3; 
+      pointer-events: none;
+      /* Added border to help detection */
+      border: 1px solid transparent;
+    }
+  </style>
+  <script>
+    function trapClick() {
+      alert('You clicked the hidden pointer-events trap!');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <button id="realButton">Click Me! (Safe Button)</button>
+    <div id="trapDiv" onclick="trapClick()"></div>
+    <div id="coverDiv"></div>
+  </div>
+</body>
+</html>

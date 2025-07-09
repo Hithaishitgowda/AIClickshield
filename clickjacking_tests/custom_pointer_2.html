@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pointer Events Layered Trap</title>
+  <style>
+    .outer {
+      position: relative;
+      width: 400px; height: 150px;
+      margin: 100px auto;
+    }
+    .real-button {
+      position: absolute; width: 100%; height: 100%;
+      font-size: 24px; background: #607d8b; color: white;
+      border: none; border-radius: 10px; z-index: 1;
+    }
+    .click-funnel {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.01);
+      z-index: 2; pointer-events: auto;
+    }
+    .ghost-cover {
+      position: absolute;
+      width: 100%; height: 100%;
+      z-index: 3; pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="outer">
+    <button class="real-button" onclick="alert('✅ Valid click')">Submit</button>
+    <div class="click-funnel" onclick="alert('🔥 Trap triggered!')"></div>
+    <div class="ghost-cover"></div>
+  </div>
+</body>
+</html>

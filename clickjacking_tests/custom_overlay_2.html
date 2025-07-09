@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hover Trap with Fake Overlay</title>
+  <style>
+    .box {
+      position: relative; width: 320px; height: 100px; margin: 150px auto;
+    }
+    .main-btn {
+      width: 100%; height: 100%;
+      font-size: 24px; border-radius: 10px;
+      background: linear-gradient(90deg, #2196f3, #21cbf3);
+      color: white; border: none; position: absolute; z-index: 1;
+    }
+    .fake-cover {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.01);
+      z-index: 2;
+    }
+  </style>
+  <script>
+    function initTrap() {
+      document.querySelector(".fake-cover").addEventListener("click", () => {
+        alert("🎯 You fell for the overlay trap!");
+      });
+    }
+    window.onload = initTrap;
+  </script>
+</head>
+<body>
+  <div class="box">
+    <button class="main-btn" onclick="alert('✔️ Legitimate click')">Accept</button>
+    <div class="fake-cover"></div>
+  </div>
+</body>
+</html>

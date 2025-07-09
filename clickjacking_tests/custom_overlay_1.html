@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Overlay Click Trap – Donate</title>
+  <style>
+    .box { position: relative; width: 300px; height: 100px; margin: 120px auto; }
+    .main-button {
+      width: 100%; height: 100%; font-size: 24px;
+      background: #00bcd4; color: white; border: none; border-radius: 10px;
+      position: absolute; z-index: 1;
+    }
+    .overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: #fff; opacity: 0.01; z-index: 2; pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <button class="main-button" onclick="alert('✅ Real Action')">Proceed</button>
+    <div class="overlay" onclick="alert('🚨 Trap Triggered!')"></div>
+  </div>
+</body>
+</html>

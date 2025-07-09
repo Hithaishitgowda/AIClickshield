@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clickjacking Risk Report</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0b1d3a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(11,29,58,1) 0%, rgba(5,10,20,1) 100%);
+            z-index: 0;
+        }
+        .background svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: pulse 10s ease-in-out infinite alternate;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.2; transform: scale(1); }
+            100% { opacity: 0.5; transform: scale(1.05); }
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #ffffff;
+        }
+        a {
+            color: #66bfff;
+            text-decoration: none;
+        }
+        section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.07);
+            border-left: 5px solid #66bfff;
+        }
+        h2 {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+        }
+        img {
+            width: 70%;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .explanation, .recommendation {
+            background-color: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 5px solid #17a2b8;
+            border-radius: 10px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .safe { color: #5cb85c; font-weight: bold; }
+        .malicious { color: #d9534f; font-weight: bold; }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+            <path d="M0 0 L800 600 M0 600 L800 0 M200 0 L600 600 M600 0 L200 600"
+                  stroke="rgba(255,255,255,0.05)" stroke-width="1" fill="none"/>
+        </svg>
+    </div>
+    <div class="container">
+        <h1>🛡️ Clickjacking Behavioral & AI Risk Report</h1>
+        <p><strong>Scanned URL:</strong> <a href="{{ url }}" target="_blank">{{ url }}</a></p>
+
+        <!-- 1. X-Frame-Options and CSP Test -->
+        <section>
+            <h2>📜 X-Frame-Options & Content-Security-Policy Test</h2>
+            <p class="explanation">
+                These HTTP headers help protect against clickjacking by preventing your site from being embedded in iframes. Missing or weak headers increase the risk of attacks.
+            </p>
+            <ul>
+                <li>
+                    <strong>X-Frame-Options:</strong>
+                    {% if header_result['headers']['X-Frame-Options'] == 'Missing' %}
+                        <span style="color:#d9534f;font-weight:bold;">Missing (High Risk!)</span>
+                    {% else %}
+                        {{ header_result['headers']['X-Frame-Options'] }}
+                    {% endif %}
+                </li>
+                <li>
+                    <strong>Content-Security-Policy:</strong>
+                    {% if header_result['headers']['Content-Security-Policy'] == 'Missing' %}
+                        <span style="color:#d9534f;font-weight:bold;">Missing (High Risk!)</span>
+                    {% else %}
+                        {{ header_result['headers']['Content-Security-Policy'] }}
+                    {% endif %}
+                </li>
+            </ul>
+        </section>
+
+        <!-- 2. Iframe Embedding Test -->
+        <section>
+            <h2>🧪 Iframe Embedding Test</h2>
+            <p class="explanation">
+                This test checks if the page can be loaded inside an iframe. If it can, attackers may be able to overlay malicious content on top of your site, making it vulnerable to classic clickjacking.
+            </p>
+            {% if iframe_successful %}
+                <p><strong>Result:</strong> Page loaded inside an iframe — <span style="color:#d9534f;font-weight:bold;">risky behavior</span>.</p>
+                {% if iframe_screenshot %}
+                    <img src="{{ url_for('static', filename=iframe_screenshot) }}" alt="Iframe Screenshot">
+                {% endif %}
+            {% else %}
+                <p><strong>Result:</strong> Page refused to load in an iframe — <span style="color:#5cb85c;font-weight:bold;">good protection in place</span>.</p>
+            {% endif %}
+        </section>
+
+        <!-- 3. JavaScript Test -->
+        <section>
+            <h2>🛠️ JavaScript Test</h2>
+            <p class="explanation">
+                Some clickjacking protections and attacks rely on JavaScript. This test checks if JavaScript is enabled and functioning on the page.
+            </p>
+            <p>
+                {% if js_enabled %}
+                    <span style="color:#5cb85c;font-weight:bold;">JavaScript is enabled and functioning (good protection in place).</span>
+                {% else %}
+                    <span style="color:#d9534f;font-weight:bold;">JavaScript appears to be disabled or blocked (risky behavior).</span>
+                {% endif %}
+            </p>
+        </section>
+
+        <!-- 4. Risk Score & Explanation -->
+        <section>
+            <h2>🛡️ Technical Risk Score & Explanation</h2>
+            <p class="explanation">
+                This score reflects how vulnerable the site is to clickjacking based on its security headers, iframe embedding behavior, and JavaScript status.
+            </p>
+            <p style="font-size: 1.4em;"><strong>Technical Risk: {{ technical_score }} / 100</strong></p>
+            <ul>
+                {% for reason in technical_reasons %}
+                    <li>{{ reason }}</li>
+                {% endfor %}
+            </ul>
+            <p>
+                {% if technical_score >= 70 %}
+                    <span class="malicious">This site is highly vulnerable to clickjacking attacks.</span>
+                {% elif technical_score >= 40 %}
+                    <span style="color:#ffc107;font-weight:bold;">This site is moderately vulnerable to clickjacking attacks.</span>
+                {% else %}
+                    <span class="safe">This site has low technical risk for clickjacking.</span>
+                {% endif %}
+            </p>
+        </section>
+
+        <!-- 5. Behavioral Analysis Result -->
+        <section>
+            <h2>🧑‍💻 Behavioral Analysis Result</h2>
+            <p class="explanation">
+                This section simulates a real user interacting with the page, looking for suspicious overlays, hidden elements, pointer-events tricks, and multi-step or animated traps. These behaviors are common in clickjacking and UI redressing attacks.
+            </p>
+            <p><strong>Actions performed:</strong></p>
+            <ul>
+                {% for action in actions_log %}
+                    <li>{{ action }}</li>
+                {% endfor %}
+            </ul>
+            <p><strong>Traps/Overlays Detected:</strong></p>
+            <ul>
+                {% for trap in traps_found %}
+                    <li>{{ trap }}</li>
+                {% else %}
+                    <li>No suspicious traps detected.</li>
+                {% endfor %}
+            </ul>
+            <p><strong>SHAP-like Explanation:</strong> {{ shap_explanation|join(', ') }}</p>
+            <p><strong>Behavioral Verdict:</strong>
+                {% if behavioral_verdict == 'malicious' %}
+                    <span class="malicious" style="text-transform:uppercase;">MALICIOUS</span>
+                {% elif behavioral_verdict == 'suspicious' %}
+                    <span style="color:#ffc107;font-weight:bold;text-transform:uppercase;">SUSPICIOUS</span>
+                {% else %}
+                    <span class="safe" style="text-transform:uppercase;">SAFE</span>
+                {% endif %}
+            </p>
+        </section>
+
+        <!-- 6. CLIP Analysis Test -->
+        <section>
+            <h2>🧠 CLIP Visual Threat Detection (AI)</h2>
+            <p class="explanation">
+                An AI model analyzes the visual appearance of the page to spot layouts and elements that resemble known clickjacking or phishing attacks. This helps catch threats that are hard to detect with code checks alone.
+            </p>
+            <p><strong>CLIP AI Verdict:</strong> <strong>{{ clip_verdict|upper }}</strong> with <strong>{{ clip_confidence }}%</strong> confidence</p>
+            <p>This prediction is based on the visual structure of the webpage using OpenAI's CLIP model.</p>
+            {% if real_screenshot %}
+                <img src="{{ url_for('static', filename=real_screenshot) }}" alt="Real Page Screenshot">
+            {% else %}
+                <p><em>No real page screenshot captured.</em></p>
+            {% endif %}
+        </section>
+
+        <!-- 7. Result: Is the page malicious or not -->
+       <section>
+    <h2>🚦 Overall Result</h2>
+    <p class="explanation">
+        This section summarizes whether the page is considered malicious, suspicious, or safe based on all technical, behavioral, and AI findings.
+    </p>
+    {% if overall_result == 'malicious' %}
+        <p class="malicious">This page is flagged as <span style="text-transform:uppercase">MALICIOUS</span>.</p>
+    {% elif overall_result == 'suspicious' %}
+        <p style="color:#ffc107;font-weight:bold;">This page is assessed as <span style="text-transform:uppercase">SUSPICIOUS</span>.</p>
+    {% else %}
+        <p class="safe">This page is assessed as <span style="text-transform:uppercase">SAFE</span>.</p>
+    {% endif %}
+</section>
+
+        <!-- 8. Feedback -->
+        <section id="feedback-section" style="margin-bottom: 40px;">
+            <h2>📝 Feedback</h2>
+            <p class="explanation">
+                Let us know if you agree with this assessment or if you have additional insights about this page's security.
+            </p>
+            <form id="feedbackForm">
+              <label>Do you agree with this result?</label><br>
+              <input type="radio" name="agree" value="yes" required> Yes
+              <input type="radio" name="agree" value="no"> No<br><br>
+              <div id="disagreeFields">
+                <label>If not, what do you think the correct verdict is?</label><br>
+                <select name="user_verdict">
+                  <option value="safe">Safe</option>
+                  <option value="suspicious">Suspicious</option>
+                  <option value="malicious">Malicious</option>
+                </select><br><br>
+                <label>Why do you think so? (optional)</label><br>
+                <textarea name="reason" rows="3" cols="40"></textarea><br><br>
+              </div>
+              <input type="hidden" name="url" value="{{ url }}">
+              <button type="submit">Submit Feedback</button>
+            </form>
+            <div id="feedbackMsg"></div>
+        </section>
+        <a class="back-link" id="runAnotherScan" href="/" style="pointer-events:none;opacity:0.5;cursor:not-allowed;">← Run another scan</a>
+    </div>
+    <script>
+    // Prevent leaving the page until feedback is submitted
+    let feedbackGiven = false;
+    window.addEventListener('beforeunload', function (e) {
+      if (!feedbackGiven) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
+    });
+
+    // Feedback form logic
+    function setDisagreeFieldsState(disabled) {
+      document.querySelector('select[name="user_verdict"]').disabled = disabled;
+      document.querySelector('textarea[name="reason"]').disabled = disabled;
+    }
+    function updateDisagreeFields() {
+      const agreeYes = document.querySelector('input[name="agree"][value="yes"]').checked;
+      setDisagreeFieldsState(agreeYes);
+    }
+    document.querySelectorAll('input[name="agree"]').forEach(el => {
+      el.addEventListener('change', updateDisagreeFields);
+    });
+    // Initialize state
+    updateDisagreeFields();
+    document.getElementById('feedbackForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const response = await fetch('/feedback', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        document.getElementById('feedbackMsg').innerText = "Thank you for your feedback!";
+        this.reset();
+        updateDisagreeFields();
+        // Enable the "Run another scan" link
+        const scanLink = document.getElementById('runAnotherScan');
+        scanLink.style.pointerEvents = 'auto';
+        scanLink.style.opacity = '1';
+        scanLink.style.cursor = 'pointer';
+        // Allow navigation away from the page
+        feedbackGiven = true;
+      } else {
+        document.getElementById('feedbackMsg').innerText = "Error submitting feedback.";
+      }
+    };
+    </script>
+</body>
+</html>

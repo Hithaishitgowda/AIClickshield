@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Double Click Trap Demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    .visible-btn {
+      padding: 20px 40px;
+      font-size: 24px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hidden-trap {
+      position: absolute;
+      top: 160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 80px;
+      background: rgba(255, 0, 0, 0.4);
+      z-index: 9999;
+      pointer-events: auto;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🎯 Click the button below quickly!</h2>
+  <button class="visible-btn" ondblclick="alert('Legitimate Action')"
+          onclick="setTimeout(revealTrap, 0)">Click Me</button>
+
+  <div class="hidden-trap" onclick="alert('🚨 You triggered the trap!')"></div>
+
+  <script>
+    function revealTrap() {
+      document.querySelector('.hidden-trap').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

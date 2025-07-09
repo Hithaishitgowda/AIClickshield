@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Classic Iframe Clickjacking</title>
+  <style>
+    .container { position: relative; width: 350px; height: 120px; margin: 100px auto; }
+    #realButton {
+      width: 350px; height: 120px; font-size: 28px;
+      background: #4CAF50; color: white; border: none; border-radius: 8px; z-index: 1; position: absolute; top: 0; left: 0;
+    }
+    #trapFrame {
+      position: absolute; top: 0; left: 0; width: 350px; height: 120px;
+      opacity: 0.01; z-index: 2; border: none; pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button id="realButton" onclick="alert('You clicked the visible button!')">Click Me!</button>
+    <iframe id="trapFrame" srcdoc="<button onclick='alert(&quot;You clicked the hidden trap!&quot;)' style='width:100%;height:100%;font-size:28px;'>Hidden Trap</button>"></iframe>
+  </div>
+</body>
+</html>
